@@ -6,6 +6,7 @@ Main server that hosts all three dummy applications:
 
 Each application has its own separate Swagger documentation.
 """
+import os
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 import uvicorn
@@ -159,14 +160,17 @@ async def health_check():
 
 
 if __name__ == "__main__":
+    # Get port from environment variable (for Railway/cloud deployments) or default to 8000
+    port = int(os.getenv("PORT", 8000))
+    
     print("=" * 60)
     print("🚀 Starting Supporting Services Server")
     print("=" * 60)
-    print("\n📍 Server: http://localhost:8000")
+    print(f"\n📍 Server: http://localhost:{port}")
     print("\n📚 Swagger Documentation:")
-    print("   • Email Server:    http://localhost:8000/email/docs")
-    print("   • ERP System:      http://localhost:8000/erp/docs")
-    print("   • Payment Gateway: http://localhost:8000/payment/docs")
+    print(f"   • Email Server:    http://localhost:{port}/email/docs")
+    print(f"   • ERP System:      http://localhost:{port}/erp/docs")
+    print(f"   • Payment Gateway: http://localhost:{port}/payment/docs")
     print("\n" + "=" * 60 + "\n")
     
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=port)

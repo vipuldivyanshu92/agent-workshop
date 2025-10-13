@@ -38,12 +38,66 @@ pip install -r requirements.txt
 
 ## Running the Server
 
+### Local Development
+
 Start the server:
 ```bash
 python main.py
 ```
 
 The server will start at `http://localhost:8000`
+
+### Deploy to Railway
+
+Railway is a deployment platform that makes it easy to deploy your application to the cloud.
+
+#### Option 1: Deploy from GitHub (Recommended)
+
+1. Push your code to a GitHub repository
+2. Go to [Railway](https://railway.app/)
+3. Click "New Project" → "Deploy from GitHub repo"
+4. Select your repository
+5. Railway will automatically detect the configuration from `railway.json` and `Procfile`
+6. Click "Deploy"
+
+#### Option 2: Deploy using Railway CLI
+
+1. Install Railway CLI:
+```bash
+npm install -g @railway/cli
+```
+
+2. Login to Railway:
+```bash
+railway login
+```
+
+3. Initialize a new Railway project (from the `supporting-servers` directory):
+```bash
+railway init
+```
+
+4. Deploy:
+```bash
+railway up
+```
+
+5. Open your deployed application:
+```bash
+railway open
+```
+
+#### Configuration
+
+The application is configured for Railway with:
+- **Procfile**: Defines how to start the application
+- **railway.json**: Railway-specific configuration with health checks
+- **runtime.txt**: Specifies Python version
+- **Environment Variables**: The app automatically uses Railway's `PORT` environment variable
+
+#### Railway Environment Variables
+
+No additional environment variables are required for basic deployment. If your application needs API keys or other secrets, add them in the Railway dashboard under "Variables".
 
 ## API Documentation
 
