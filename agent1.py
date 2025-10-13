@@ -1,5 +1,6 @@
 from agents import function_tool, HostedMCPTool, Agent, ModelSettings, TResponseInputItem, Runner, RunConfig
 from pydantic import BaseModel
+import asyncio
 
 # Tool definitions
 @function_tool
@@ -368,3 +369,7 @@ async def run_workflow(workflow_input: WorkflowInput):
     }
   else:
     return classification_agent_result
+
+
+if __name__ == "__main__":
+  asyncio.run(run_workflow(WorkflowInput(input_as_text="I want to return my phone")))

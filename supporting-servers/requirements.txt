@@ -1,6 +1,9 @@
-fastapi>=0.115,<0.120
-uvicorn==0.24.0
-pydantic==2.5.0
-python-multipart==0.0.6
-starlette>=0.40,<0.49
+fastapi
+uvicorn
+pydantic
+python-multipart
+starlette
 email-validator
+openai
+openai-agents
+python-dotenv
