@@ -3,11 +3,12 @@ Dummy Email Server
 Provides inbox and outbox functionality
 """
 from fastapi import APIRouter, HTTPException, status, FastAPI
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
 from datetime import datetime
 from enum import Enum
 import os
+import base64
 
 # Get base URL from environment variable or use default
 BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
@@ -42,6 +43,13 @@ class EmailStatus(str, Enum):
     FAILED = "failed"
 
 
+class Attachment(BaseModel):
+    filename: str
+    content: str = Field(..., description="Base64 encoded file content")
+    content_type: str = Field(..., description="MIME type of the file")
+    size: int = Field(..., description="Size in bytes")
+
+
 class Email(BaseModel):
     id: Optional[int] = None
     from_email: EmailStr
@@ -50,6 +58,7 @@ class Email(BaseModel):
     body: str
     timestamp: Optional[datetime] = None
     status: EmailStatus = EmailStatus.PENDING
+    attachments: List[Attachment] = []
 
 
 class EmailCreate(BaseModel):
@@ -57,6 +66,7 @@ class EmailCreate(BaseModel):
     to_email: EmailStr
     subject: str
     body: str
+    attachments: List[Attachment] = []
 
 
 class EmailResponse(BaseModel):
@@ -67,6 +77,7 @@ class EmailResponse(BaseModel):
     body: str
     timestamp: datetime
     status: EmailStatus
+    attachments: List[Attachment] = []
 
 
 # Inbox Endpoints
@@ -138,7 +149,8 @@ async def send_email(email: EmailCreate):
         "subject": email.subject,
         "body": email.body,
         "timestamp": datetime.now(),
-        "status": EmailStatus.SENT
+        "status": EmailStatus.SENT,
+        "attachments": [att.dict() for att in email.attachments]
     }
     
     email_id_counter["value"] += 1
@@ -198,6 +210,34 @@ async def clear_outbox():
     count = len(outbox_storage)
     outbox_storage = []
     return {"message": f"Cleared {count} emails from outbox"}
+
+
+@router.get("/inbox/{email_id}/attachments/{filename}")
+async def get_inbox_attachment(email_id: int, filename: str):
+    """
+    Get a specific attachment from an inbox email
+    """
+    for email in inbox_storage:
+        if email["id"] == email_id:
+            for attachment in email.get("attachments", []):
+                if attachment["filename"] == filename:
+                    return attachment
+            raise HTTPException(status_code=404, detail="Attachment not found")
+    raise HTTPException(status_code=404, detail="Email not found")
+
+
+@router.get("/outbox/{email_id}/attachments/{filename}")
+async def get_outbox_attachment(email_id: int, filename: str):
+    """
+    Get a specific attachment from an outbox email
+    """
+    for email in outbox_storage:
+        if email["id"] == email_id:
+            for attachment in email.get("attachments", []):
+                if attachment["filename"] == filename:
+                    return attachment
+            raise HTTPException(status_code=404, detail="Attachment not found")
+    raise HTTPException(status_code=404, detail="Email not found")
 
 
 # Include router in the email app
