@@ -97,7 +97,24 @@ The application is configured for Railway with:
 
 #### Railway Environment Variables
 
-No additional environment variables are required for basic deployment. If your application needs API keys or other secrets, add them in the Railway dashboard under "Variables".
+The application automatically uses Railway's `PORT` environment variable. 
+
+**Optional Environment Variables:**
+
+- **`BASE_URL`**: The base URL of your deployed application for Swagger documentation
+  - **Example**: `https://your-app.railway.app`
+  - **Default**: `http://localhost:8000` (for local development)
+  - **Purpose**: Updates the Swagger/OpenAPI server URLs to show the correct hosting domain instead of just relative paths
+  - **How to set**: In Railway dashboard → Your Project → Variables → Add Variable
+
+If not set, the Swagger docs will default to localhost URLs. For production deployments, it's recommended to set this to your Railway URL.
+
+**Setting BASE_URL in Railway:**
+1. Go to your Railway project
+2. Click on your service
+3. Navigate to "Variables" tab
+4. Add: `BASE_URL` = `https://your-app.railway.app` (replace with your actual Railway URL)
+5. Redeploy the service
 
 ## API Documentation
 

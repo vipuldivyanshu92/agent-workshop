@@ -9,6 +9,10 @@ from datetime import datetime
 from enum import Enum
 import random
 import string
+import os
+
+# Get base URL from environment variable or use default
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 # Create separate FastAPI app for Payment Gateway with its own docs
 payment_app = FastAPI(
@@ -16,7 +20,17 @@ payment_app = FastAPI(
     description="Dummy Payment Gateway for processing payments and refunds",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    servers=[
+        {
+            "url": f"{BASE_URL}/payment",
+            "description": "Payment Gateway Server"
+        },
+        {
+            "url": "http://localhost:8000/payment",
+            "description": "Local Development Server"
+        }
+    ]
 )
 
 router = APIRouter()

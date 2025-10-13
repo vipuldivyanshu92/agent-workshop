@@ -26,7 +26,7 @@ env_path = Path(__file__).parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
 # Validate required environment variables
-required_vars = ["OPENAI_API_KEY", "MCP_SERVER_URL", "MCP_AUTH_TOKEN"]
+required_vars = ["OPENAI_API_KEY", "WEATHER_MCP", "MCP_AUTH_TOKEN"]
 missing_vars = [var for var in required_vars if not os.getenv(var)]
 
 if missing_vars:

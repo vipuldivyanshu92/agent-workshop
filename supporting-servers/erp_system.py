@@ -7,6 +7,10 @@ from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 from datetime import datetime, date
 from enum import Enum
+import os
+
+# Get base URL from environment variable or use default
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 # Create separate FastAPI app for ERP System with its own docs
 erp_app = FastAPI(
@@ -14,7 +18,17 @@ erp_app = FastAPI(
     description="Dummy ERP System for managing customers, invoices, and payments",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    servers=[
+        {
+            "url": f"{BASE_URL}/erp",
+            "description": "ERP System Server"
+        },
+        {
+            "url": "http://localhost:8000/erp",
+            "description": "Local Development Server"
+        }
+    ]
 )
 
 router = APIRouter()

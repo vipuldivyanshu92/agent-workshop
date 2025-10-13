@@ -7,6 +7,10 @@ from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 from datetime import datetime
 from enum import Enum
+import os
+
+# Get base URL from environment variable or use default
+BASE_URL = os.getenv("BASE_URL", "http://localhost:8000")
 
 # Create separate FastAPI app for Email Server with its own docs
 email_app = FastAPI(
@@ -14,7 +18,17 @@ email_app = FastAPI(
     description="Dummy Email Server for managing inbox and outbox",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
+    servers=[
+        {
+            "url": f"{BASE_URL}/email",
+            "description": "Email Server"
+        },
+        {
+            "url": "http://localhost:8000/email",
+            "description": "Local Development Server"
+        }
+    ]
 )
 
 router = APIRouter()

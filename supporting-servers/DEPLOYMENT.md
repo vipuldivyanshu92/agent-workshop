@@ -109,7 +109,29 @@ Excludes unnecessary files from deployment (similar to `.gitignore`)
 
 The application automatically uses Railway's `PORT` environment variable. No additional configuration needed!
 
-If you need to add environment variables (e.g., API keys):
+### Optional: Setting BASE_URL for Swagger Documentation
+
+To display the correct hosting domain in Swagger/OpenAPI documentation instead of just relative paths:
+
+**Via Railway Dashboard:**
+1. Go to your project
+2. Click on your service
+3. Go to "Variables" tab
+4. Add variable: `BASE_URL` = `https://your-app.railway.app` (replace with your actual Railway URL)
+5. Redeploy the service
+
+**Via Railway CLI:**
+```bash
+railway variables set BASE_URL=https://your-app.railway.app
+```
+
+This will update the Swagger docs server URLs from just `/payment`, `/erp`, `/email` to include the full domain like `https://your-app.railway.app/payment`.
+
+If not set, the documentation will default to `http://localhost:8000` which works fine for local development.
+
+### Other Environment Variables
+
+If you need to add other environment variables (e.g., API keys):
 
 **Via Railway Dashboard:**
 1. Go to your project
