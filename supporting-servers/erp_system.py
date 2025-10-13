@@ -23,10 +23,6 @@ erp_app = FastAPI(
         {
             "url": f"{BASE_URL}/erp",
             "description": "ERP System Server"
-        },
-        {
-            "url": "http://localhost:8000/erp",
-            "description": "Local Development Server"
         }
     ]
 )

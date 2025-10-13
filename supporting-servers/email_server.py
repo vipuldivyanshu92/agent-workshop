@@ -23,10 +23,6 @@ email_app = FastAPI(
         {
             "url": f"{BASE_URL}/email",
             "description": "Email Server"
-        },
-        {
-            "url": "http://localhost:8000/email",
-            "description": "Local Development Server"
         }
     ]
 )

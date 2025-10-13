@@ -25,10 +25,6 @@ payment_app = FastAPI(
         {
             "url": f"{BASE_URL}/payment",
             "description": "Payment Gateway Server"
-        },
-        {
-            "url": "http://localhost:8000/payment",
-            "description": "Local Development Server"
         }
     ]
 )
