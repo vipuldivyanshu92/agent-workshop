@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from agents import Agent, Runner, Usage, function_tool
 
-
+# Weather Model
 class Weather(BaseModel):
     city: str
     temperature_range: str
@@ -27,6 +27,8 @@ def print_usage(usage: Usage) -> None:
 
 # Main code entrypoint
 async def main() -> None:
+
+    # Weather Agent
     agent = Agent(
         name="Weather Assistant",
         instructions="You are a helpful assistant that can check weather information. Use tools if needed.",
@@ -36,6 +38,7 @@ async def main() -> None:
     print("=== Weather Assistant ===")
     print("Ask me about the weather! (Type 'quit' or 'exit' to stop)\n")
 
+    # User input loop
     while True:
         try:
             # Get user input
