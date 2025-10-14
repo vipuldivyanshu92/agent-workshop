@@ -7,3 +7,4 @@ email-validator
 openai
 openai-agents
 python-dotenv
+PyPDF2
